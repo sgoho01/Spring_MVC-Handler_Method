@@ -21,6 +21,7 @@ public class SampleController {
         Event event = new Event();
         event.setId(id);
         event.setName(name);
+
         return event;
     }
 

@@ -46,30 +46,38 @@ public class MultiFormController {
             return "/events/form-limit";
         }
         sessionStatus.setComplete();
-        attributes.addAttribute("name", event.getName());
-        attributes.addAttribute("limit", event.getLimit());
+
+        // RedirectAttributes 사용 시
+//        attributes.addAttribute("name", event.getName());
+//        attributes.addAttribute("limit", event.getLimit());
+
+        // Flash Attibutes 사용
+        attributes.addFlashAttribute("newEvent", event);
+
         return "redirect:/events/list2";
     }
 
     @GetMapping("/events/list2")
-    public String getEvents(@RequestParam String name,
-                            @RequestParam Integer limit,
+    public String getEvents(
+//                            @RequestParam String name,
+//                            @RequestParam Integer limit,
+                            @ModelAttribute("newEvent") Event event,
                             Model model,
                             @SessionAttribute LocalDateTime visitTime) {
         System.out.println(visitTime);
         // db 에서 조회 처리
 
-        Event event0 = new Event();
-        event0.setName(name);
-        event0.setLimit(limit);
+//        Event event = new Event();
+//        event.setName(name);
+//        event.setLimit(limit);
 
-        Event event = new Event();
-        event.setName("ghsong");
-        event.setLimit(50);
+        Event spring = new Event();
+        spring.setName("ghsong222");
+        spring.setLimit(30);
 
         List<Event> eventList = new ArrayList<>();
+        eventList.add(spring);
         eventList.add(event);
-        eventList.add(event0);
 
         model.addAttribute("eventList", eventList);
 

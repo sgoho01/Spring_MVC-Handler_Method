@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -15,6 +16,17 @@ import java.util.List;
 @Controller
 @SessionAttributes("event")
 public class MultiFormController {
+
+    @InitBinder
+    public void InitEventBinder(WebDataBinder webDataBinder) {
+        // id 컬럼 값 걸러냄
+        webDataBinder.setDisallowedFields("id");
+    }
+
+    @ModelAttribute
+    public void categories(Model model) {
+        //model.addAttribute("catogories", List.of("study", "semina", "hobby"));
+    }
 
     @GetMapping("/events/form/name")
     public String eventsForName(Model model) {
@@ -61,7 +73,7 @@ public class MultiFormController {
     public String getEvents(
 //                            @RequestParam String name,
 //                            @RequestParam Integer limit,
-                            @ModelAttribute("newEvent") Event event,
+
                             Model model,
                             @SessionAttribute LocalDateTime visitTime) {
         System.out.println(visitTime);
@@ -75,9 +87,11 @@ public class MultiFormController {
         spring.setName("ghsong222");
         spring.setLimit(30);
 
+        Event newEvent = (Event) model.asMap().get("newEvent");
+
         List<Event> eventList = new ArrayList<>();
         eventList.add(spring);
-        eventList.add(event);
+        eventList.add(newEvent);
 
         model.addAttribute("eventList", eventList);
 
